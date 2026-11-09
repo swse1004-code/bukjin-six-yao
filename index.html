@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>북진 경방육효학습 (北辰 卦氣易學)</title>
+    <style>
+        :root {
+            --bg-color: #f4f1ea;
+            --card-bg: #faf8f5;
+            --paper-color: #ffffff;
+            --ink-black: #1a1917;
+            --ink-gray: #4a4945;
+            --ink-light: #8c8983;
+            --border-color: #dcd6cd;
+            --seal-red: #c83727;
+            --seal-dark: #962518;
+            --accent-gold: #b8860b;
+            --font-family: 'Gowun Batang', 'Noto Serif KR', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--ink-black);
+            font-family: var(--font-family);
+            line-height: 1.6;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--paper-color);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            padding: 20px;
+            position: relative;
+        }
+
+        /* 전통 낙관 스타일 */
+        .seal-mark {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border: 2px solid var(--seal-red);
+            color: var(--seal-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 2px;
+            writing-mode: vertical-rl;
+            padding: 2px;
+            background-color: rgba(200, 55, 39, 0.03);
+            user-select: none;
+        }
+
+        header {
+            border-bottom: 2px solid var(--ink-black);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: var(--ink-black);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header p {
+            color: var(--ink-gray);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* 탭 메뉴 */
+        .nav-tabs {
+            display: flex;
+            gap: 5px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            padding: 10px 15px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--ink-gray);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--ink-black);
+        }
+
+        .tab-btn.active {
+            color: var(--seal-red);
+            border-bottom-color: var(--seal-red);
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 카드 및 레이아웃 */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-left: 3px solid var(--ink-black);
+            padding-left: 8px;
+            margin-bottom: 12px;
+            color: var(--ink-black);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 650px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 컨트롤 */
+        select, button, input {
+            font-family: inherit;
+            font-size: 0.95rem;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            background: #fff;
+        }
+
+        button.btn-primary {
+            background: var(--ink-black);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button.btn-primary:hover {
+            background: var(--ink-gray);
+        }
+
+        button.btn-seal {
+            background: var(--seal-red);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button.btn-seal:hover {
+            background: var(--seal-dark);
+        }
+
+        /* 괘상 렌더링 (6효) */
+        .hexagram-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 140px;
+            margin: 10px auto;
+        }
+
+        .yaao-line {
+            height: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .yaao-yang {
+            background-color: var(--ink-black);
+            width: 100%;
+            height: 100%;
+        }
+
+        .yaao-yin {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+        }
+
+        .yaao-yin-part {
+            background-color: var(--ink-black);
+            width: 44%;
+            height: 100%;
+        }
+
+        /* 표 스타일 */
+        table.hex-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        table.hex-table th {
+            background: #efebe4;
+            border: 1px solid var(--border-color);
+            padding: 8px 4px;
+            color: var(--ink-black);
+        }
+
+        table.hex-table td {
+            border: 1px solid var(--border-color);
+            padding: 8px 4px;
+            background: #fff;
+        }
+
+        .badge-se {
+            background: var(--seal-red);
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .badge-ung {
+            background: var(--ink-gray);
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+
+        .text-bokshin {
+            color: #8b0000;
+            font-size: 0.82rem;
+        }
+
+        /* 가리기 버튼 */
+        .hide-toggle {
+            cursor: pointer;
+            user-select: none;
+            background: #e9e5dd;
+            border-radius: 3px;
+            padding: 2px 6px;
+        }
+
+        .hide-toggle.masked {
+            background: #2b2b2b;
+            color: #2b2b2b;
+        }
+
+        /* 퀴즈 / 해설 */
+        .quiz-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 8px;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .quiz-option:hover {
+            background: #f0ece1;
+        }
+
+        .quiz-option.correct {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .quiz-option.wrong {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .audit-pass { color: #2e7d32; font-weight: bold; }
+        .audit-fail { color: #c83727; font-weight: bold; }
+
+        .explanation-box {
+            background: #f8f6f0;
+            border-left: 3px solid var(--accent-gold);
+            padding: 10px;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="seal-mark">北辰<br>卦氣</div>
+    
+    <header>
+        <h1>북진 경방육효학습</h1>
+        <p>원광디지털대학교 「상수역학」 10~11주차 교안 기반 팔궁괘·세응·납갑·육친·복신·용신 학습 시스템</p>
+    </header>
+
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('calc')">卦氣 자동계산기</button>
+        <button class="tab-btn" onclick="switchTab('memorize')">암기/가리기 모드</button>
+        <button class="tab-btn" onclick="switchTab('quiz')">단계별 퀴즈</button>
+        <button class="tab-btn" onclick="switchTab('practice')">종합 실전풀이</button>
+        <button class="tab-btn" onclick="switchTab('audit')">📜 64卦 무결성 검증보고서</button>
+    </nav>
+
+    <!-- 1. 괘기 자동계산기 TAB -->
+    <div id="tab-calc" class="tab-content active">
+        <div class="card">
+            <div class="card-title">괘 선택 및 검색</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                <label>팔궁(八宮) 선택: </label>
+                <select id="palgung-select" onchange="onPalGungChange()">
+                    <option value="乾">건궁 (乾宮 - 金)</option>
+                    <option value="兌">태궁 (兌宮 - 金)</option>
+                    <option value="離">리궁 (離宮 - 火)</option>
+                    <option value="震">진궁 (震宮 - 木)</option>
+                    <option value="巽">손궁 (巽宮 - 木)</option>
+                    <option value="坎">감궁 (坎宮 - 水)</option>
+                    <option value="艮">간궁 (艮宮 - 土)</option>
+                    <option value="坤">곤궁 (坤宮 - 土)</option>
+                </select>
+
+                <label>괘 선택: </label>
+                <select id="hexagram-select" onchange="renderHexagramAnalysis()"></select>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-title">괘상 및 기본 정보</div>
+                <div id="hex-visual-container"></div>
+                <div id="hex-basic-info" style="margin-top: 15px; font-size: 0.92rem;"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">경방 괘기 분석 요약</div>
+                <div id="hex-summary-info" style="font-size: 0.9rem; line-height: 1.7;"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">6효 상세 괘상표 (상효 ~ 초효)</div>
+            <table class="hex-table">
+                <thead>
+                    <tr>
+                        <th>효위</th>
+                        <th>음양</th>
+                        <th>세/응</th>
+                        <th>납갑(千干/地支)</th>
+                        <th>오행</th>
+                        <th>육친(六親)</th>
+                        <th>복신(伏神)</th>
+                    </tr>
+                </thead>
+                <tbody id="hex-table-body"></tbody>
+            </table>
+        </div>
+
+        <div class="explanation-box" id="hex-logic-explanation"></div>
+    </div>
+
+    <!-- 2. 암기/가리기 모드 TAB -->
+    <div id="tab-memorize" class="tab-content">
+        <div class="card">
+            <div class="card-title">암기 가리기 설정</div>
+            <p style="font-size: 0.88rem; margin-bottom: 10px;">항목을 가린 후 괘를 클릭하여 자신의 기억을 테스트해보세요.</p>
+            <div style="display: flex; gap: 15px;">
+                <label><input type="checkbox" id="mask-seung" checked onchange="renderMemorizeTable()"> 세/응 가리기</label>
+                <label><input type="checkbox" id="mask-napgap" checked onchange="renderMemorizeTable()"> 납갑 가리기</label>
+                <label><input type="checkbox" id="mask-yukchin" checked onchange="renderMemorizeTable()"> 육친 가리기</label>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title" id="mem-hex-title">괘 암기 카운터</div>
+            <table class="hex-table">
+                <thead>
+                    <tr>
+                        <th>효위</th>
+                        <th>음양</th>
+                        <th>세/응</th>
+                        <th>납갑</th>
+                        <th>육친</th>
+                    </tr>
+                </thead>
+                <tbody id="mem-table-body"></tbody>
+            </table>
+            <button class="btn-primary" style="margin-top: 15px;" onclick="nextMemorizeHex()">다음 괘 연습하기</button>
+        </div>
+    </div>
+
+    <!-- 3. 단계별 퀴즈 TAB -->
+    <div id="tab-quiz" class="tab-content">
+        <div class="card">
+            <div class="card-title">경방 괘기역학 단계별 퀴즈</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <span id="quiz-progress" style="font-weight: bold;">문제 1 / 5</span>
+                <span id="quiz-score">점수: 0점</span>
+            </div>
+            <div id="quiz-question-box" style="font-size: 1.05rem; font-weight: bold; margin-bottom: 15px;"></div>
+            <div id="quiz-options-box"></div>
+            <div id="quiz-explanation" class="explanation-box" style="display: none;"></div>
+            <button id="quiz-next-btn" class="btn-seal" style="margin-top: 15px; display: none;" onclick="nextQuiz()">다음 문제</button>
+        </div>
+    </div>
+
+    <!-- 4. 종합 실전풀이 TAB -->
+    <div id="tab-practice" class="tab-content">
+        <div class="card">
+            <div class="card-title">용신(用神) 및 실전 괘상 판단</div>
+            <p style="font-size: 0.9rem; margin-bottom: 12px;">질문의 초점에 맞춰 용신을 선정하고, 괘 내 표출(비신) 여부 및 복신을 파악하는 실전 연습입니다.</p>
+            <div style="margin-bottom: 15px;">
+                <label><b>점사(占事) 질문 선택:</b> </label>
+                <select id="practice-topic" onchange="renderPracticeScenario()">
+                    <option value="selfWealth">나의 전반적인 재운 (世爻)</option>
+                    <option value="specificWealth">구체적으로 구하는 재물 (妻財)</option>
+                    <option value="selfOutcome">나의 성패·득실·진퇴 (世爻)</option>
+                    <option value="negotiation">상대방과의 교섭 (世爻·應爻)</option>
+                    <option value="taxOffice">세무서 자체 (官鬼)</option>
+                    <option value="household">집안의 일 (父母)</option>
+                    <option value="myIllness">내 병 자체 (世爻)</option>
+                    <option value="recovery">병이 나을 것인가 (子孫)</option>
+                    <option value="symptom">병의 증상 (官鬼)</option>
+                    <option value="diseaseCourse">병의 전개 (應爻)</option>
+                    <option value="doctorRole">담당 의사라는 역할 (子孫)</option>
+                    <option value="specificDoctor">그 의사라는 특정 상대 (應爻)</option>
+                    <option value="medicine">현재 복용 중인 약 자체 (應爻)</option>
+                    <option value="effectiveMedicine">약이 듣는가 (子孫)</option>
+                    <option value="harmfulMedicine">약이 해로운가 (官鬼)</option>
+                    <option value="treatment">치료법의 적절성 (子孫)</option>
+                </select>
+                <button class="btn-primary" style="margin-left:8px" onclick="renderPracticeScenario()">다른 괘 연습</button>
+                <div style="margin-top:8px;font-size:.85rem">교안 144~146쪽의 질문별 용신 예시. 실제 점단이 아닌 학습용입니다.</div>
+            </div>
+            <div id="practice-scenario-box"></div>
+        </div>
+    </div>
+
+    <!-- 5. 64괘 무결성 검증보고서 TAB -->
+    <div id="tab-audit" class="tab-content">
+        <div class="card">
+            <div class="card-title">64卦 전체 독립 정답표 대조 전수 검증 (Cross-Audit)</div>
+            <p style="font-size: 0.88rem; color: var(--ink-gray); margin-bottom: 12px;">
+                교안 팔궁괘차도·팔괘납갑도 및 육친·복신 배당 규칙을 별도 정답 데이터로 저장해 64개 괘를 대조합니다. 교안의 해석 전체를 자동 검증하는 기능은 아닙니다.
+            </p>
+            <button class="btn-seal" onclick="runFullAudit()">64卦 자동 검증 실행하기</button>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; text-align: center;">
+                <div style="background: #fff; border: 1px solid var(--border-color); padding: 8px;">
+                    <div style="font-size: 0.8rem;">검증 괘 수</div>
+                    <div id="audit-total-count" style="font-size: 1.2rem; font-weight: bold;">-</div>
+                </div>
+                <div style="background: #fff; border: 1px solid var(--border-color); padding: 8px;">
+                    <div style="font-size: 0.8rem;">일치 (PASS)</div>
+                    <div id="audit-pass-count" class="audit-pass" style="font-size: 1.2rem;">-</div>
+                </div>
+                <div style="background: #fff; border: 1px solid var(--border-color); padding: 8px;">
+                    <div style="font-size: 0.8rem;">불일치 (FAIL)</div>
+                    <div id="audit-fail-count" class="audit-fail" style="font-size: 1.2rem;">-</div>
+                </div>
+                <div style="background: #fff; border: 1px solid var(--border-color); padding: 8px;">
+                    <div style="font-size: 0.8rem;">일치율</div>
+                    <div id="audit-rate" style="font-size: 1.2rem; font-weight: bold;">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">괘별 검증 세부 항목 결과 리포트</div>
+            <div style="max-height: 400px; overflow-y: auto;">
+                <table class="hex-table">
+                    <thead>
+                        <tr>
+                            <th>괘명</th>
+                            <th>소속 宮</th>
+                            <th>변효 단계</th>
+                            <th>세/응 위치</th>
+                            <th>납갑 배치</th>
+                            <th>육친 계산</th>
+                            <th>복신 배당</th>
+                            <th>최종 판정</th>
+                        </tr>
+                    </thead>
+                    <tbody id="audit-report-body">
+                        <tr><td colspan="8">검증 실행 버튼을 눌러주세요.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/**
+ * 1. 기초 역학 데이터 세팅 (상수역학 10~11주차)
+ */
+const TRIGRAMS = {
+    '乾': { name: '건', bin: '111', elem: '金', type: '양', stemIn: '甲', stemOut: '壬', branches: ['子','寅','辰','午','申','戌'] },
+    '兌': { name: '태', bin: '110', elem: '金', type: '음', stemIn: '丁', stemOut: '丁', branches: ['巳','卯','丑','亥','酉','未'] },
+    '離': { name: '리', bin: '101', elem: '火', type: '음', stemIn: '己', stemOut: '己', branches: ['卯','丑','亥','酉','未','巳'] },
+    '震': { name: '진', bin: '100', elem: '木', type: '양', stemIn: '庚', stemOut: '庚', branches: ['子','寅','辰','午','申','戌'] },
+    '巽': { name: '손', bin: '011', elem: '木', type: '음', stemIn: '辛', stemOut: '辛', branches: ['丑','亥','酉','未','巳','卯'] },
+    '坎': { name: '감', bin: '010', elem: '水', type: '양', stemIn: '戊', stemOut: '戊', branches: ['寅','辰','午','申','戌','子'] },
+    '艮': { name: '간', bin: '001', elem: '土', type: '양', stemIn: '丙', stemOut: '丙', branches: ['辰','午','申','戌','子','寅'] },
+    '坤': { name: '곤', bin: '000', elem: '土', type: '음', stemIn: '乙', stemOut: '癸', branches: ['未','巳','卯','丑','亥','酉'] }
+};
+
+const PALGUNG_ORDER = [
+    { code: '乾', elem: '金' }, { code: '兌', elem: '金' },
+    { code: '離', elem: '火' }, { code: '震', elem: '木' },
+    { code: '巽', elem: '木' }, { code: '坎', elem: '水' },
+    { code: '艮', elem: '土' }, { code: '坤', elem: '土' }
+];
+
+const BRANCH_ELEMENTS = {
+    '子':'水', '丑':'土', '寅':'木', '卯':'木', '辰':'土', '巳':'火',
+    '午':'火', '未':'土', '申':'金', '酉':'金', '戌':'土', '亥':'水'
+};
+
+const HEX_NAMES = {
+    '乾乾': ['건위천','乾爲天'], '乾坤': ['천지피','天地否'], '乾震': ['천뢰무망','天雷無妄'], '乾巽': ['천풍구','天風姤'],
+    '乾坎': ['천수송','天水訟'], '乾離': ['천화동인','天火同人'], '乾艮': ['천산둔','天山遯'], '乾兌': ['천택리','天澤履'],
+    '兌乾': ['택천쾌','澤天夬'], '兌坤': ['택지췌','澤地萃'], '兌震': ['택뢰수','澤雷隨'], '兌巽': ['택풍대과','澤風大過'],
+    '兌坎': ['택수곤','澤水困'], '兌離': ['택화혁','澤火革'], '兌艮': ['택산함','澤山咸'], '兌兌': ['태위택','兌爲澤'],
+    '離乾': ['화천대유','火天大有'], '離坤': ['화지진','火地晉'], '離震': ['화뢰서합','火雷噬嗑'], '離巽': ['화풍정','火風鼎'],
+    '離坎': ['화수미제','火水未濟'], '離離': ['리위화','離爲火'], '離艮': ['화산려','火山旅'], '離兌': ['화택규','火澤睽'],
+    '震乾': ['뇌천대장','雷天大壯'], '震坤': ['뇌지예','雷地豫'], '震震': ['진위뇌','震爲雷'], '震巽': ['뇌풍항','雷風恒'],
+    '震坎': ['뇌수해','雷水解'], '震離': ['뇌화풍','雷火豐'], '震艮': ['뇌산소과','雷山小過'], '震兌': ['뇌택귀매','雷澤歸妹'],
+    '巽乾': ['풍천소축','風天小畜'], '巽坤': ['풍지관','風地觀'], '巽震': ['풍뢰익','風雷益'], '巽巽': ['풍위풍','巽爲風'],
+    '巽坎': ['풍수환','風水渙'], '巽離': ['풍화가인','風火家人'], '巽艮': ['풍산점','風山漸'], '巽兌': ['풍택중부','風澤中孚'],
+    '坎乾': ['수천수','水天需'], '坎坤': ['수지비','水地比'], '坎震': ['수뢰둔','水雷屯'], '坎巽': ['수풍정','水風井'],
+    '坎坎': ['감위수','坎爲水'], '坎離': ['수화기제','水火旣濟'], '坎艮': ['수산건','水山蹇'], '坎兌': ['수택절','水澤節'],
+    '艮乾': ['산천대축','山天大畜'], '艮坤': ['산지박','山地剝'], '艮震': ['산뢰이','山雷頤'], '艮巽': ['산풍고','山風蠱'],
+    '艮坎': ['산수몽','山水蒙'], '艮離': ['산화비','山火賁'], '艮艮': ['간위산','艮爲山'], '艮兌': ['산택손','山澤損'],
+    '坤乾': ['지천태','地天泰'], '坤坤': ['곤위지','坤爲地'], '坤震': ['지뢰복','地雷復'], '坤巽': ['지풍승','地風升'],
+    '坤坎': ['지수사','地水師'], '坤離': ['지화명이','地火明夷'], '坤艮': ['지산겸','地山謙'], '坤兌': ['지택임','地澤臨']
+};
+
+/**
+ * 2. 동적 경방 계산 엔진
+ */
+function bitFlip(b) { return b === '1' ? '0' : '1'; }
+
+function getYukchin(palgangElem, branchElem) {
+    const sMap = { '木':'火', '火':'土', '土':'金', '金':'水', '水':'木' };
+    const kMap = { '木':'土', '土':'水', '水':'火', '火':'金', '金':'木' };
+
+    if (palgangElem === branchElem) return '형제';
+    if (sMap[palgangElem] === branchElem) return '자손';
+    if (kMap[palgangElem] === branchElem) return '처재';
+    if (sMap[branchElem] === palgangElem) return '부모';
+    if (kMap[branchElem] === palgangElem) return '관귀';
+    return '';
+}
+
+function calcHexagram(palgangCode, stageIdx) {
+    const stages = ['상세', '1세', '2세', '3세', '4세', '5세', '유혼', '귀혼'];
+    const sePos  = [6, 1, 2, 3, 4, 5, 4, 3];
+    const ungPos = [3, 4, 5, 6, 1, 2, 1, 6];
+
+    const pElem = TRIGRAMS[palgangCode].elem;
+    let bits = (TRIGRAMS[palgangCode].bin + TRIGRAMS[palgangCode].bin).split('');
+
+    for (let step = 0; step <= stageIdx; step++) {
+        if (step === 0) continue;
+        if (step <= 5) bits[step - 1] = bitFlip(bits[step - 1]);
+        else if (step === 6) bits[3] = bitFlip(bits[3]); // 유혼
+        else if (step === 7) { // 귀혼
+            bits[0] = bitFlip(bits[0]);
+            bits[1] = bitFlip(bits[1]);
+            bits[2] = bitFlip(bits[2]);
+        }
+    }
+
+    const inBin = bits.slice(0, 3).join('');
+    const outBin = bits.slice(3, 6).join('');
+
+    let inTri = '', outTri = '';
+    for (let k in TRIGRAMS) {
+        if (TRIGRAMS[k].bin === inBin) inTri = k;
+        if (TRIGRAMS[k].bin === outBin) outTri = k;
+    }
+
+    const namePair = HEX_NAMES[outTri + inTri];
+    const korName = namePair[0];
+    const hanjaName = namePair[1];
+
+    // 6효 상세 납갑 및 육친 구축
+    const inInfo = TRIGRAMS[inTri];
+    const outInfo = TRIGRAMS[outTri];
+    const lines = [];
+    const presentYC = new Set();
+
+    for (let i = 0; i < 3; i++) {
+        const br = inInfo.branches[i];
+        const el = BRANCH_ELEMENTS[br];
+        const yc = getYukchin(pElem, el);
+        presentYC.add(yc);
+        lines.push({
+            lineIdx: i + 1,
+            yinYang: inBin[i] === '1' ? '양' : '음',
+            stem: inInfo.stemIn,
+            branch: br,
+            elem: el,
+            yukchin: yc,
+            isSe: sePos[stageIdx] === (i + 1),
+            isUng: ungPos[stageIdx] === (i + 1)
+        });
+    }
+
+    for (let i = 0; i < 3; i++) {
+        const br = outInfo.branches[i + 3];
+        const el = BRANCH_ELEMENTS[br];
+        const yc = getYukchin(pElem, el);
+        presentYC.add(yc);
+        lines.push({
+            lineIdx: i + 4,
+            yinYang: outBin[i] === '1' ? '양' : '음',
+            stem: outInfo.stemOut,
+            branch: br,
+            elem: el,
+            yukchin: yc,
+            isSe: sePos[stageIdx] === (i + 4),
+            isUng: ungPos[stageIdx] === (i + 4)
+        });
+    }
+
+    // 복신(伏神) 계산
+    const allYC = ['부모', '형제', '자손', '처재', '관귀'];
+    const missingYC = allYC.filter(y => !presentYC.has(y));
+    const bokshinMap = {};
+
+    if (missingYC.length > 0) {
+        const pureTri = TRIGRAMS[palgangCode];
+        const pureLines = [];
+        for (let i = 0; i < 3; i++) {
+            const br = pureTri.branches[i];
+            const el = BRANCH_ELEMENTS[br];
+            pureLines.push({ lineIdx: i+1, stem: pureTri.stemIn, branch: br, elem: el, yukchin: getYukchin(pElem, el) });
+        }
+        for (let i = 0; i < 3; i++) {
+            const br = pureTri.branches[i+3];
+            const el = BRANCH_ELEMENTS[br];
+            pureLines.push({ lineIdx: i+4, stem: pureTri.stemOut, branch: br, elem: el, yukchin: getYukchin(pElem, el) });
+        }
+
+        pureLines.forEach(pl => {
+            if (missingYC.includes(pl.yukchin)) {
+                bokshinMap[pl.lineIdx] = pl;
+            }
+        });
+    }
+
+    return {
+        palgang: palgangCode,
+        palgangElem: pElem,
+        stage: stages[stageIdx],
+        sePos: sePos[stageIdx],
+        ungPos: ungPos[stageIdx],
+        inTri, outTri, korName, hanjaName,
+        lines, missingYC, bokshinMap
+    };
+}
+
+/**
+ * 3. UI 렌더링 및 조작 로직
+ */
+let currentHexData = null;
+
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    document.getElementById('tab-' + tabId).classList.add('active');
+
+    if (tabId === 'memorize') initMemorizeTab();
+    if (tabId === 'quiz') startQuiz();
+    if (tabId === 'practice') renderPracticeScenario();
+}
+
+function onPalGungChange() {
+    const pCode = document.getElementById('palgung-select').value;
+    const select = document.getElementById('hexagram-select');
+    select.innerHTML = '';
+
+    const stages = ['상세 (八純卦)', '1세 (一世)', '2세 (二世)', '3세 (三世)', '4세 (四世)', '5세 (五世)', '유혼 (游魂)', '귀혼 (歸魂)'];
+    stages.forEach((st, idx) => {
+        const hex = calcHexagram(pCode, idx);
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.innerText = `${st}: ${hex.korName} (${hex.hanjaName})`;
+        select.appendChild(opt);
+    });
+
+    renderHexagramAnalysis();
+}
+
+function renderHexagramAnalysis() {
+    const pCode = document.getElementById('palgung-select').value;
+    const stageIdx = parseInt(document.getElementById('hexagram-select').value);
+    const data = calcHexagram(pCode, stageIdx);
+    currentHexData = data;
+
+    // 괘상 시각화 (초효가 아래)
+    const vis = document.getElementById('hex-visual-container');
+    vis.innerHTML = '';
+    const box = document.createElement('div');
+    box.className = 'hexagram-visual';
+
+    for (let i = 5; i >= 0; i--) {
+        const line = data.lines[i];
+        const row = document.createElement('div');
+        row.className = 'yaao-line';
+        if (line.yinYang === '양') {
+            row.innerHTML = `<div class="yaao-yang"></div>`;
+        } else {
+            row.innerHTML = `<div class="yaao-yin-part"></div><div class="yaao-yin-part"></div>`;
+        }
+        box.appendChild(row);
+    }
+    vis.appendChild(box);
+
+    // 기본 정보
+    document.getElementById('hex-basic-info').innerHTML = `
+        <b>괘명:</b> ${data.korName} (${data.hanjaName})<br>
+        <b>소속:</b> ${data.palgang}궁 (${data.palgangElem}金/木/水/火/土) / ${data.stage}<br>
+        <b>내외괘:</b> 상괘 ${data.outTri} / 하괘 ${data.inTri}
+    `;
+
+    // 요약 정보
+    document.getElementById('hex-summary-info').innerHTML = `
+        • <b>세효(世爻):</b> ${data.sePos}효에 위치 / <b>응효(應爻):</b> ${data.ungPos}효에 위치<br>
+        • <b>궁의 오행:</b> ${data.palgang}궁 속성인 [<b>${data.palgangElem}</b>]을 기준으로 육친 산출<br>
+        • <b>복신(伏神):</b> ${data.missingYC.length > 0 ? data.missingYC.join(', ') + ' 누락' : '없음 (5육친 구비)'}
+    `;
+
+    // 효 표 렌더링 (6효 -> 1효)
+    const tbody = document.getElementById('hex-table-body');
+    tbody.innerHTML = '';
+    for (let i = 5; i >= 0; i--) {
+        const line = data.lines[i];
+        const bs = data.bokshinMap[line.lineIdx];
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${line.lineIdx}효</td>
+            <td>${line.yinYang}</td>
+            <td>${line.isSe ? '<span class="badge-se">世</span>' : (line.isUng ? '<span class="badge-ung">應</span>' : '')}</td>
+            <td>${line.stem}${line.branch}</td>
+            <td>${line.elem}</td>
+            <td><b>${line.yukchin}</b></td>
+            <td class="text-bokshin">${bs ? `伏 [${bs.yukchin}] ${bs.stem}${bs.branch}` : '-'}</td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    // 해설
+    document.getElementById('hex-logic-explanation').innerHTML = `
+        <b>[상수역학 괘기 해설]</b><br>
+        본 괘는 <b>${data.palgang}궁</b>의 <b>${data.stage}</b>로, ${data.stage === '상세' ? '본래 모체 팔순괘입니다.' : data.stage + ' 변효 규칙에 따라 세효가 ' + data.sePos + '효에 설정됩니다.'}<br>
+        육친은 ${data.palgang}궁 오행(${data.palgangElem})과 각 효의 지지 오행 간 생극(生剋) 관계로 산출됩니다.
+    `;
+}
+
+/**
+ * 4. 암기 모드 기능
+ */
+let memIndex = 0;
+function initMemorizeTab() {
+    renderMemorizeTable();
+}
+
+function nextMemorizeHex() {
+    memIndex = (memIndex + 1) % 64;
+    renderMemorizeTable();
+}
+
+function renderMemorizeTable() {
+    const pIdx = Math.floor(memIndex / 8);
+    const sIdx = memIndex % 8;
+    const data = calcHexagram(PALGUNG_ORDER[pIdx].code, sIdx);
+
+    document.getElementById('mem-hex-title').innerText = `암기 연습 (${memIndex + 1}/64): ${data.korName} (${data.hanjaName})`;
+
+    const maskSe = document.getElementById('mask-seung').checked;
+    const maskNap = document.getElementById('mask-napgap').checked;
+    const maskYuk = document.getElementById('mask-yukchin').checked;
+
+    const tbody = document.getElementById('mem-table-body');
+    tbody.innerHTML = '';
+
+    for (let i = 5; i >= 0; i--) {
+        const line = data.lines[i];
+        const tr = document.createElement('tr');
+
+        const seTxt = line.isSe ? '世' : (line.isUng ? '應' : '-');
+        const napTxt = `${line.stem}${line.branch} (${line.elem})`;
+        const yukTxt = line.yukchin;
+
+        tr.innerHTML = `
+            <td>${line.lineIdx}효</td>
+            <td>${line.yinYang}</td>
+            <td><span class="hide-toggle ${maskSe ? 'masked' : ''}" onclick="this.classList.toggle('masked')">${seTxt}</span></td>
+            <td><span class="hide-toggle ${maskNap ? 'masked' : ''}" onclick="this.classList.toggle('masked')">${napTxt}</span></td>
+            <td><span class="hide-toggle ${maskYuk ? 'masked' : ''}" onclick="this.classList.toggle('masked')">${yukTxt}</span></td>
+        `;
+        tbody.appendChild(tr);
+    }
+}
+
+/**
+ * 5. 퀴즈 엔진
+ */
+let quizStep = 0;
+let quizScore = 0;
+let currentQuiz = null;
+
+function startQuiz() {
+    quizStep = 0;
+    quizScore = 0;
+    loadQuizQuestion();
+}
+
+function loadQuizQuestion() {
+    document.getElementById('quiz-progress').innerText = `문제 ${quizStep + 1} / 5`;
+    document.getElementById('quiz-score').innerText = `점수: ${quizScore}점`;
+    document.getElementById('quiz-explanation').style.display = 'none';
+    document.getElementById('quiz-next-btn').style.display = 'none';
+
+    // 랜덤 괘 선택
+    const pCode = PALGUNG_ORDER[Math.floor(Math.random() * 8)].code;
+    const sIdx = Math.floor(Math.random() * 8);
+    const data = calcHexagram(pCode, sIdx);
+
+    const qTypes = ['SE', 'PALGUNG', 'YUKCHIN'];
+    const type = qTypes[Math.floor(Math.random() * qTypes.length)];
+
+    let qText = '', correctAns = '', options = [];
+
+    if (type === 'SE') {
+        qText = `[세효 퀴즈] 괘 [<b>${data.korName} (${data.hanjaName})</b>]의 세효(世爻)는 몇 효에 위치합니까?`;
+        correctAns = data.sePos + '효';
+        options = ['1효', '2효', '3효', '4효', '5효', '6효'];
+    } else if (type === 'PALGUNG') {
+        qText = `[팔궁 퀴즈] 괘 [<b>${data.korName} (${data.hanjaName})</b>]는 어느 궁(宮)에 속합니까?`;
+        const palaceNames = { '乾':'건', '兌':'태', '離':'리', '震':'진', '巽':'손', '坎':'감', '艮':'간', '坤':'곤' };
+        correctAns = palaceNames[data.palgang] + '궁';
+        options = ['건궁', '태궁', '리궁', '진궁', '손궁', '감궁', '간궁', '곤궁'];
+    } else if (type === 'YUKCHIN') {
+        const line = data.lines[Math.floor(Math.random() * 6)];
+        qText = `[육친 퀴즈] [<b>${data.korName}</b>]의 ${line.lineIdx}효(${line.stem}${line.branch})에 배당되는 육친은? (소속: ${data.palgang}궁 오행 ${data.palgangElem})`;
+        correctAns = line.yukchin;
+        options = ['부모', '형제', '자손', '처재', '관귀'];
+    }
+
+    currentQuiz = { correctAns, exp: `정답: <b>${correctAns}</b> (${data.korName}는 ${data.palgang}궁 ${data.stage}로 세효: ${data.sePos}효)` };
+
+    document.getElementById('quiz-question-box').innerHTML = qText;
+    const optBox = document.getElementById('quiz-options-box');
+    optBox.innerHTML = '';
+
+    options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option';
+        btn.innerText = opt;
+        btn.onclick = () => checkQuizAnswer(opt, btn);
+        optBox.appendChild(btn);
+    });
+}
+
+function checkQuizAnswer(userAns, btnElem) {
+    const isRight = (userAns === currentQuiz.correctAns);
+    if (isRight) {
+        btnElem.classList.add('correct');
+        quizScore += 20;
+    } else {
+        btnElem.classList.add('wrong');
+    }
+
+    document.querySelectorAll('.quiz-option').forEach(b => b.onclick = null);
+
+    const expBox = document.getElementById('quiz-explanation');
+    expBox.style.display = 'block';
+    expBox.innerHTML = (isRight ? '<b>정답입니다!</b> ' : '<b>오답입니다.</b> ') + currentQuiz.exp;
+
+    document.getElementById('quiz-next-btn').style.display = 'inline-block';
+}
+
+function nextQuiz() {
+    quizStep++;
+    if (quizStep < 5) {
+        loadQuizQuestion();
+    } else {
+        alert(`퀴즈 완료! 최종 점수: ${quizScore}점`);
+        startQuiz();
+    }
+}
+
+/**
+ * 6. 실전 용신 연습
+ */
+const PRACTICE_CASES = {
+    selfWealth: ['世','자신의 전반적 재운은 世爻 (교안 144쪽)'],
+    specificWealth: ['처재','구하는 재물이 구체적인 경우 妻財 (145쪽)'],
+    selfOutcome: ['世','자신의 성패·득실·진퇴는 世爻 (145쪽)'],
+    negotiation: ['世應','상대와의 교섭은 자신 世爻, 상대 應爻 (145쪽)'],
+    taxOffice: ['관귀','세무서 자체는 官鬼 (145쪽)'],
+    household: ['부모','집안의 일은 父母 (144쪽)'],
+    myIllness: ['世','내 병 자체는 世爻 (145쪽)'],
+    recovery: ['자손','회복 여부는 子孫 (145쪽)'],
+    symptom: ['관귀','병의 증상은 官鬼 (145쪽)'],
+    diseaseCourse: ['應','병의 전개는 應爻 (145쪽)'],
+    doctorRole: ['자손','담당 의사라는 역할은 子孫 (145쪽)'],
+    specificDoctor: ['應','특정 의사에 관한 질문은 應爻 (145쪽)'],
+    medicine: ['應','현재 복용 중인 약 자체는 應爻 (145쪽)'],
+    effectiveMedicine: ['자손','약이 듣는가의 여부는 子孫 (145쪽)'],
+    harmfulMedicine: ['관귀','약의 해로움은 官鬼 (145쪽)'],
+    treatment: ['자손','치료법의 적절성은 子孫 (145쪽)']
+};
+function renderPracticeScenario() {
+    const topic = document.getElementById('practice-topic').value;
+    const [target, reason] = PRACTICE_CASES[topic];
+    const pCode = PALGUNG_ORDER[Math.floor(Math.random() * 8)].code;
+    const sIdx = Math.floor(Math.random() * 8);
+    const data = calcHexagram(pCode, sIdx);
+    let result;
+    if (target === '世' || target === '應' || target === '世應') {
+        const labels = target === '世應' ? [['世',data.sePos],['應',data.ungPos]] : [[target,target === '世' ? data.sePos : data.ungPos]];
+        result = labels.map(([name,pos]) => `${name}爻: ${pos}효 (${data.lines[pos-1].stem}${data.lines[pos-1].branch}, ${data.lines[pos-1].yukchin})`).join(' / ');
+    } else {
+        const matches = data.lines.filter(l => l.yukchin === target);
+        if (matches.length) result = `飛神 ${target}: ${matches.map(l => `${l.lineIdx}효 ${l.stem}${l.branch}`).join(', ')}`;
+        else {
+            const hidden = Object.values(data.bokshinMap).filter(l => l.yukchin === target);
+            result = hidden.length ? `伏神 ${target}: ${hidden.map(l => `${l.lineIdx}효 아래 ${l.stem}${l.branch}`).join(', ')}` : `해당 육친의 복신 배당을 확인하세요.`;
+        }
+        if (matches.length > 1) result += '<br>동일 육친이 여럿입니다. 교안 146쪽의 動爻 우선 규칙을 적용하려면 동효 정보가 필요합니다.';
+    }
+    document.getElementById('practice-scenario-box').innerHTML = `
+      <div style="background:#fff;padding:12px;border:1px solid var(--border-color)">
+        <b>제시된 괘: ${data.korName} (${data.hanjaName}) — ${data.palgang}궁 ${data.stage}</b>
+        <p style="margin-top:8px">용신 기준: <b>${reason}</b></p>
+        <div class="explanation-box">${result}</div>
+        <p style="font-size:.85rem;margin-top:8px">동효·월일·왕쇠 등은 입력되지 않았으므로 길흉을 판단하지 않습니다.</p>
+      </div>`;
+}
+
+/**
+ * 7. 64괘 무결성 전수 검증 보고서 엔진
+ */
+// 교안 121~125쪽 팔궁괘차도에서 옮긴 정답표. 순서: 八純, 一~五世, 游魂, 歸魂.
+const AUDIT_PALACE_REFERENCE = {
+  '乾':['乾爲天','天風姤','天山遯','天地否','風地觀','山地剝','火地晉','火天大有'],
+  '震':['震爲雷','雷地豫','雷水解','雷風恒','地風升','水風井','澤風大過','澤雷隨'],
+  '坎':['坎爲水','水澤節','水雷屯','水火旣濟','澤火革','雷火豐','地火明夷','地水師'],
+  '艮':['艮爲山','山火賁','山天大畜','山澤損','火澤睽','天澤履','風澤中孚','風山漸'],
+  '坤':['坤爲地','地雷復','地澤臨','地天泰','雷天大壯','澤天夬','水天需','水地比'],
+  '巽':['巽爲風','風天小畜','風火家人','風雷益','天雷無妄','火雷噬嗑','山雷頤','山風蠱'],
+  '離':['離爲火','火山旅','火風鼎','火水未濟','山水蒙','風水渙','天水訟','天火同人'],
+  '兌':['兌爲澤','澤水困','澤地萃','澤山咸','水山蹇','地山謙','雷山小過','雷澤歸妹']
+};
+// 교안 팔괘납갑도: 각 괘의 내괘(초~삼효)와 외괘(사~상효) 간지 독립 정답표.
+const AUDIT_NAJIA_REFERENCE = {
+ '乾':[['甲子','甲寅','甲辰'],['壬午','壬申','壬戌']],
+ '兌':[['丁巳','丁卯','丁丑'],['丁亥','丁酉','丁未']],
+ '離':[['己卯','己丑','己亥'],['己酉','己未','己巳']],
+ '震':[['庚子','庚寅','庚辰'],['庚午','庚申','庚戌']],
+ '巽':[['辛丑','辛亥','辛酉'],['辛未','辛巳','辛卯']],
+ '坎':[['戊寅','戊辰','戊午'],['戊申','戊戌','戊子']],
+ '艮':[['丙辰','丙午','丙申'],['丙戌','丙子','丙寅']],
+ '坤':[['乙未','乙巳','乙卯'],['癸丑','癸亥','癸酉']]
+};
+const AUDIT_SE = [6,1,2,3,4,5,4,3];
+const AUDIT_UNG = [3,4,5,6,1,2,1,6];
+function auditExpectedYukchin(palaceElem, branchElem) {
+  const generates = {木:'火',火:'土',土:'金',金:'水',水:'木'};
+  const controls = {木:'土',土:'水',水:'火',火:'金',金:'木'};
+  if (palaceElem === branchElem) return '형제';
+  if (generates[palaceElem] === branchElem) return '자손';
+  if (generates[branchElem] === palaceElem) return '부모';
+  if (controls[palaceElem] === branchElem) return '처재';
+  if (controls[branchElem] === palaceElem) return '관귀';
+  return '불명';
+}
+function runFullAudit() {
+  let passed=0, failed=0, total=0;
+  const tbody=document.getElementById('audit-report-body'); tbody.innerHTML='';
+  PALGUNG_ORDER.forEach(p=>{
+    for(let stage=0;stage<8;stage++) {
+      total++;
+      const actual=calcHexagram(p.code,stage);
+      const errors=[];
+      const palaceOK=actual.hanjaName===AUDIT_PALACE_REFERENCE[p.code][stage] && actual.palgang===p.code;
+      if(!palaceOK) errors.push(`팔궁·괘명: 기대 ${AUDIT_PALACE_REFERENCE[p.code][stage]}, 실제 ${actual.hanjaName}`);
+      const seOK=actual.sePos===AUDIT_SE[stage] && actual.ungPos===AUDIT_UNG[stage] && actual.lines.filter(l=>l.isSe).length===1 && actual.lines.filter(l=>l.isUng).length===1;
+      if(!seOK) errors.push(`세응: 기대 ${AUDIT_SE[stage]}/${AUDIT_UNG[stage]}, 실제 ${actual.sePos}/${actual.ungPos}`);
+      const expectedNajia=[...AUDIT_NAJIA_REFERENCE[actual.inTri][0],...AUDIT_NAJIA_REFERENCE[actual.outTri][1]];
+      const napOK=actual.lines.every((l,i)=>{
+        const got=l.stem+l.branch;
+        if(got!==expectedNajia[i]) errors.push(`${i+1}효 납갑: 기대 ${expectedNajia[i]}, 실제 ${got}`);
+        return got===expectedNajia[i];
+      });
+      const yukOK=actual.lines.every((l,i)=>{
+        const expected=auditExpectedYukchin(p.elem,BRANCH_ELEMENTS[expectedNajia[i].slice(-1)]);
+        if(l.yukchin!==expected) errors.push(`${i+1}효 육친: 기대 ${expected}, 실제 ${l.yukchin}`);
+        return l.yukchin===expected;
+      });
+      // 궁의 순괘 납갑 정답표를 기준으로 결손 육친의 복신 위치·간지를 재구성한다.
+      const palacePure=[...AUDIT_NAJIA_REFERENCE[p.code][0],...AUDIT_NAJIA_REFERENCE[p.code][1]];
+      const present=new Set(expectedNajia.map(n=>auditExpectedYukchin(p.elem,BRANCH_ELEMENTS[n.slice(-1)])));
+      const missing=['부모','형제','자손','처재','관귀'].filter(y=>!present.has(y));
+      const expectedBok={};
+      palacePure.forEach((n,i)=>{
+        const y=auditExpectedYukchin(p.elem,BRANCH_ELEMENTS[n.slice(-1)]);
+        if(missing.includes(y)) expectedBok[i+1]=`${y}:${n}`;
+      });
+      const gotBok={};
+      Object.entries(actual.bokshinMap).forEach(([i,l])=>gotBok[i]=`${l.yukchin}:${l.stem}${l.branch}`);
+      const bokOK=JSON.stringify(expectedBok)===JSON.stringify(gotBok) && JSON.stringify(missing)===JSON.stringify(actual.missingYC);
+      if(!bokOK) errors.push(`복신: 기대 ${JSON.stringify(expectedBok)}, 실제 ${JSON.stringify(gotBok)}`);
+      const ok=palaceOK&&seOK&&napOK&&yukOK&&bokOK;
+      ok?passed++:failed++;
+      const tr=document.createElement('tr');
+      const status=(v)=>`<span class="${v?'audit-pass':'audit-fail'}">${v?'PASS':'FAIL'}</span>`;
+      tr.innerHTML=`<td>${actual.korName}<br>(${actual.hanjaName})</td><td>${status(palaceOK)} ${p.code}궁</td><td>${actual.stage}</td><td>${status(seOK)} ${actual.sePos}/${actual.ungPos}</td><td>${status(napOK)}</td><td>${status(yukOK)}</td><td>${status(bokOK)}</td><td>${status(ok)}${errors.length?'<details><summary>오류 상세</summary>'+errors.join('<br>')+'</details>':''}</td>`;
+      tbody.appendChild(tr);
+    }
+  });
+  document.getElementById('audit-total-count').innerText=total+'개 卦';
+  document.getElementById('audit-pass-count').innerText=passed+'건';
+  document.getElementById('audit-fail-count').innerText=failed+'건';
+  document.getElementById('audit-rate').innerText=(100*passed/total).toFixed(1)+'%';
+}
+
+// 초기화
+window.onload = function() {
+    onPalGungChange();
+};
+</script>
+</body>
+</html>
